@@ -1,23 +1,20 @@
 #include <iostream>
 #include <vector>
-#include <queue>
 #include <string.h>
-#include <algorithm>
 using namespace std;
-typedef pair<pair<int, int>, int> node;
+typedef struct node {
+	int a, b, c;
+};
+vector<node>v;
 vector<vector<int>>g;
-vector<node>shark;
-int path[150];
-int chk[150];
-int b[150];
-int INF = 999999999;
-int r, u, v, n, m, x, s = 0, t = 101, ans = 0, a, f, d;
+int b[51];
+int chk[51];
 int dfs(int cur) {
 	if (chk[cur]) return 0;
-	chk[cur] += 1;
+	chk[cur] = 1;
 	for (int i = 0; i < g[cur].size(); i++) {
 		int next = g[cur][i];
-		if (b[next] == 0 || dfs(b[next]) == 1) {
+		if (b[next] == 0 || dfs(b[next])) {
 			b[next] = cur;
 			return 1;
 		}
@@ -25,33 +22,28 @@ int dfs(int cur) {
 	return 0;
 }
 int main() {
-	scanf("%d", &n);
-	g.resize(105);
+	ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+	int n; cin >> n;
+	g.resize(n + 1);
 	for (int i = 0; i < n; i++) {
-		scanf("%d %d %d", &a, &f, &d);
-		node temp = { {a,f},d };
-		shark.push_back(temp);
+		int a, b, c; cin >> a >> b >> c;
+		v.push_back(node{ a,b,c });
 	}
-	for (int i = 0; i < shark.size(); i++) {
-		for (int j = 0; j < shark.size(); j++) {
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < n; j++) {
 			if (i == j) continue;
-			if (shark[i].first.first == shark[j].first.first && shark[i].first.second == shark[j].first.second && shark[i].second == shark[j].second) {
-				if (i < j) g[i + 1].push_back(j + 51);
-				else continue;
-			}
-			else if (shark[i].first.first >= shark[j].first.first && shark[i].first.second >= shark[j].first.second && shark[i].second >= shark[j].second) {
-				g[i + 1].push_back(j + 51);
-			}
-
+			if (i > j && v[i].a == v[j].a && v[i].b == v[j].b && v[i].c == v[j].c) continue;
+			if (v[i].a >= v[j].a && v[i].b >= v[j].b && v[i].c >= v[j].c) g[i + 1].push_back(j + 1);
 		}
 	}
+	int ans = 0;
 	for (int i = 1; i <= n; i++) {
 		memset(chk, 0, sizeof(chk));
 		dfs(i);
 		memset(chk, 0, sizeof(chk));
 		dfs(i);
 	}
-	for (int i = 51; i <= n + 50; i++) if (b[i] == 0) ans += 1;
-	printf("%d", ans);
+	for (int i = 1; i <= 50 && i <= n; i++) if (b[i] == 0) ans += 1;
+	cout << ans;
 	return 0;
 }
