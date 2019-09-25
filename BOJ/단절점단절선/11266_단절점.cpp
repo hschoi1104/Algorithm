@@ -24,6 +24,7 @@ int dfs(int idx, bool root) {
 	if (c || root && child > 1)  ans.push_back(idx);
 	return ret;
 }
+
 int main() {
 	ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 	int v, e; cin >> v >> e;
