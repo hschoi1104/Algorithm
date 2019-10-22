@@ -1,26 +1,30 @@
 #include <iostream>
-#include <vector>
 #include <string>
+#include <vector>
 using namespace std;
-
+vector<int>pi;
+string pattern;
+void fail(){
+	int j = 0;
+	for (int i = 1; i < pattern.size(); i++){
+		while (j > 0 && pattern[i] != pattern[j]) j = pi[j - 1];
+		if (pattern[i] == pattern[j]){
+			pi[i] = j + 1;
+			j++;
+		}
+	}
+}
 int main() {
+	ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 	while (1) {
-		string pattern;
 		getline(cin, pattern);
 		if (pattern == ".") break;
-		vector<int>failure(pattern.length(), 0);
-		//Failure function
-		int j = 0;
-		for (int i = 1; i < pattern.size(); i++) {
-			while (j > 0 && pattern[i] != pattern[j]) j = failure[j - 1];
-			if (pattern[i] == pattern[j]) {
-				failure[i] = j + 1;
-				j++;
-			}
-		}
-		int len = pattern.size() - failure[pattern.size() - 1];
-		if (pattern.size() % len != 0) printf("1\n");
-		else printf("%d\n", pattern.size() / len);
+		pi.resize(pattern.size());
+		fail();
+		int len = pattern.size() - pi[pattern.size() - 1];
+		if (pattern.size() % len != 0) cout << 1 << "\n";
+		else cout << pattern.size() / len << "\n";
+		pi.clear();
 	}
 	return 0;
 }
