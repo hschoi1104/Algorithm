@@ -1,10 +1,10 @@
-#include<iostream>
+#include <iostream>
 using namespace std;
 template <typename T>
 class Node {
 public:
-	T value;
-	Node<T>* next = nullptr;
+	T val;
+	Node<T>* next;
 	Node() {};
 	~Node() {};
 };
@@ -17,9 +17,9 @@ private:
 public:
 	Stack() : head(nullptr), tail(nullptr), size(0) {};
 	~Stack() {};
-	void Push(T _value) {
+	void Push(T _val) {
 		Node<T>* newNode = new Node<T>;
-		newNode->value = _value;
+		newNode->val = _val;
 		if (head == nullptr) {
 			head = tail = newNode;
 		}
@@ -27,34 +27,36 @@ public:
 			tail->next = newNode;
 			tail = tail->next;
 		}
-		size++;
+		size += 1;
 	}
 	T Pop() {
-		if (size == 0) return -1;
+		if (!size) return -1;
+		Node<T>* ptr = head;
+		T value = ptr->val;
+		if (head == tail) {
+			delete tail;
+			head = tail = nullptr;
+		}
 		else {
-			Node<T>* ptr = head;
-			int value = ptr->value;
-			if (head == tail) {
-				head = tail = nullptr;
+			while (ptr->next != tail) {
+				ptr = ptr->next;
 			}
-			else {
-				while (ptr != nullptr) {
-					if (ptr->next == tail) break;
-					ptr = ptr->next;
-				}
-				value = ptr->next->value;
-			}
+			value = ptr->next->val;
 			delete tail;
 			tail = ptr;
-			size--;
-			return value;
 		}
+		size--;
+		return value;
 	}
-	T Top() {
-		return tail->value;
+	bool Empty() {
+		if (!size) return true;
+		else return false;
 	}
 	T Size() {
 		return size;
+	}
+	T Top() {
+		return tail->val;
 	}
 };
 int main() {
@@ -74,5 +76,4 @@ int main() {
 	cout << s.Pop() << "\n";
 	cout << "TOP: " << s.Top() << "\n";
 	cout << s.Pop() << "\n";
-
 }

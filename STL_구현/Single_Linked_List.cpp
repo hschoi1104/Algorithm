@@ -1,122 +1,109 @@
 #include <iostream>
 using namespace std;
-
 template <typename T>
-struct Node {
+class Node {
 public:
-	T value;
-	struct Node<T>* next = nullptr;
+	T val;
+	Node<T>* next;
+	Node() {};
+	~Node() {};
 };
-
 template <typename T>
 class SLL {
 private:
 	Node<T>* head;
 	Node<T>* tail;
-	int size = 0;
+	T size;
 public:
-	SLL() : head(nullptr), tail(nullptr) {}
-	~SLL() {}
-
-	void addNode(T _value) {
-		Node<T>* node = new Node<T>;
-		size++;
-		node->value = _value;
-		node->next = nullptr;
-
+	SLL() :head(nullptr), tail(nullptr), size(0) {};
+	~SLL() {};
+	void AddNode(T _val) {
+		Node<T>* newNode = new Node<T>;
+		newNode->val = _val;
+		newNode->next = nullptr;
 		if (head == nullptr) {
-			head = node;
-			tail = node;
+			head = tail = newNode;
 		}
 		else {
-			tail->next = node;
+			tail->next = newNode;
 			tail = tail->next;
 		}
+		size++;
 	}
-	void removeNode(T _value) {
+	bool Find(T _val) {
 		Node<T>* ptr = head;
-		Node<T>* tmp = ptr;
+		if (!size) return false;
 		while (ptr != nullptr) {
-			if (ptr->value == _value) {
-				break;
-			}
-			else {
-				tmp = ptr;
-				ptr = tmp->next;
-			}
-		}
-		if (ptr != nullptr) {
-			cout << "delete:" << ptr->value << "\n";
-			tmp->next = ptr->next;
-			delete ptr;
-			size--;
-		}
-		else {
-			cout << "delete fail\n";
-		}
-	}
-
-	void show() {
-		Node<T>* ptr = head;
-		while (ptr != nullptr) {
-			cout << ptr->value << " ";
+			if (ptr->val == _val) return true;
 			ptr = ptr->next;
 		}
-		cout << "\n";
+		return false;
 	}
-	void deleteList() {
-		Node<T>* ptr = head;
-		while (ptr != nullptr) {
-			head = ptr->next;
-			delete ptr;
-			ptr = head;
-		}
-		size = 0;
-	}
-	void addPos(int _index, int _value) {
-		Node<T>* node = new Node<T>;
+	void DeleteNode(T _val) {
 		Node<T>* ptr = head;
 		Node<T>* tmp = ptr;
-
-		node->value = _value;
-		node->next = nullptr;
-		for (int i = 0; i < _index; i++) {
+		if (!size) return;
+		if (size == 1) {
+			delete ptr;
+			head = tail = nullptr;
+			size = 0;
+			return;
+		}
+		while (ptr!= nullptr) {
+			if (ptr->val == _val) break;
 			tmp = ptr;
 			ptr = ptr->next;
 		}
-		tmp->next = node;
-		node->next = ptr;
-		size++;
+		tmp->next = ptr->next;
+		delete ptr;
+		size--;
 	}
-	void search(int _value) {
+	void Print() {
 		Node<T>* ptr = head;
-		int index = 0;
 		while (ptr != nullptr) {
-			if (ptr->value == _value) {
-				cout << index << "번째 존재\n";
-				break;
-			}
+			cout << ptr->val << " ";
 			ptr = ptr->next;
-			index++;
 		}
+		cout << "\n";
+		return;
 	}
-	int Size() {
-		return size;
+	void AddPos(T _pos, T _val) {
+		if (_pos > size) return;
+		Node<T>* newNode = new Node<T>;
+		newNode->val = _val;
+		newNode->next = nullptr;
+		Node<T>* ptr = head;
+		Node<T>* tmp = ptr;
+		for (int i = 0; i < _pos; i++) {
+			tmp = ptr;
+			ptr = ptr->next;
+		}
+		tmp->next = newNode;
+		newNode->next = ptr;
+		size++;
 	}
 };
 int main() {
 	SLL<int> sll;
-	sll.addNode(1);
-	sll.addNode(2);
-	sll.addNode(3);
-	sll.addNode(5);
-	sll.addNode(6);
-	sll.show();
-	sll.addPos(3, 4);
-	sll.show();
-	sll.removeNode(2);
-	sll.show();
-	sll.deleteList();
-	sll.show();
+	sll.AddNode(1);
+	sll.AddNode(2);
+	sll.AddNode(3);
+	sll.AddNode(4);
+	sll.AddNode(5);
+	sll.AddNode(6);
+	sll.Print();
+	sll.DeleteNode(3);
+	sll.Print();
+	//cout << (sll.Find(2)) << "\n";
+	sll.DeleteNode(2);
+	sll.Print();
+	sll.DeleteNode(4);
+	sll.Print();
+	sll.DeleteNode(5);
+	sll.Print();
+	sll.DeleteNode(6);
+	sll.Print();
+	sll.DeleteNode(1);
+	sll.Print();
 	return 0;
 }

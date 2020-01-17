@@ -1,58 +1,55 @@
 #include <iostream>
 using namespace std;
+
 template <typename T>
 class Node {
 public:
-	T value;
-	Node* next;
-
-	Node() : value(0), next(nullptr) {};
+	T val;
+	Node<T>* next;
+	Node() {};
 	~Node() {};
 };
+
 template <typename T>
 class Queue {
 private:
 	Node<T>* head;
 	Node<T>* tail;
-	int size;
+	T size;
 public:
 	Queue() :head(nullptr), tail(nullptr), size(0) {};
 	~Queue() {};
-	void Push(T _value) {
+	void Push(T _val) {
 		Node<T>* newNode = new Node<T>;
-		newNode->value = _value;
-		size++;
+		newNode->val = _val;
 		if (head == nullptr) {
-			head = newNode;
-			tail = newNode;
+			head = tail = newNode;
 		}
 		else {
 			tail->next = newNode;
 			tail = tail->next;
 		}
+		size += 1;
 	}
-	T Pop() {
-		if (size == 0) return -1;
-		else {
-			Node<T>* ptr = head;
-			T value = head->value;
 
-			if (head == tail) {
-				head = tail = nullptr;
-			}
-			else {
-				head = head->next;
-			}
-			delete ptr;
-			return value;
-		}
+	T Pop() {
+		if (!size) return -1;
+		Node<T>* ptr = head;
+		int value = ptr->val;
+		if (head == tail) head = tail = nullptr;
+		else head = head->next;
+		delete ptr;
+		size -= 1;
+		return value;
 	}
+
 	bool Empty() {
-		if (head == nullptr) return true;
+		if (!size) return true;
 		else return false;
 	}
-	T Front() {
-		return head->value;
+
+	T front() {
+		return head->val;
 	}
 };
 int main() {
