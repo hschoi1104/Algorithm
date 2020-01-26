@@ -5,12 +5,6 @@ using namespace std;
 int dir[4][2] = { {1,0} ,{0,-1},{-1,0},{0,1} };
 typedef pair<int, int> p;
 set<p>s;
-	if (k == 4) k = 0;
-	return k;
-}
-void chk(p cur) {
-	bool res[9] = { false };
-	for (int i = 1; i <= 8; i++) {
 void draw(int x, int y, int d, int g) {
 	s.insert({ x,y });
 	vector<int>v;
