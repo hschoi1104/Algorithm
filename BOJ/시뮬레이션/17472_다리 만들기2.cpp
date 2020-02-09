@@ -1,7 +1,7 @@
 #include <iostream>
 #include <queue>
 using namespace std;
-int n, m, c = 1, arr[11][11], label[11][11], par[7], chk[7], dir[4][2] = { {0,-1},{-1,0},{0,1},{1,0} };//©ч,╩С,©Л,го
+int n, m, c = 1, arr[11][11], label[11][11], par[7], dir[4][2] = { {0,-1},{-1,0},{0,1},{1,0} };//©ч,╩С,©Л,го
 typedef struct pos {
 	int y, x, d;
 	bool operator <(const pos& p) const {
@@ -9,13 +9,15 @@ typedef struct pos {
 	}
 };
 priority_queue<pos> pq;
+bool chk(int ny, int nx) {
+	return 0 <= ny && ny < n && 0 <= nx && nx < m;
+}
 int find(int u) {
 	if (par[u] == u) return u;
 	return par[u] = find(par[u]);
 }
 void _union(int v, int u) {
-	v = find(v);
-	u = find(u);
+	v = find(v), u = find(u);
 	par[v] = u;
 }
 int kruskal() {
@@ -25,13 +27,11 @@ int kruskal() {
 		auto cur = pq.top();
 		pq.pop();
 		if (find(cur.y) != find(cur.x)) {
-			sum += cur.d;
+			sum += cur.d, cnt++;
 			_union(cur.y, cur.x);
-			cnt++;
 		}
 	}
-	if (cnt != c - 2) sum = -1;
-	return sum;
+	return cnt != c - 2 ? -1 : sum;
 }
 void findLoad(pos s, int cur, int kd) {
 	int ny = s.y, nx = s.x, d = 0;
@@ -42,8 +42,7 @@ void findLoad(pos s, int cur, int kd) {
 			if (d != 1) pq.push(pos{ cur,label[ny][nx],d });
 			break;
 		}
-		ny += dir[kd][0];
-		nx += dir[kd][1];
+		ny += dir[kd][0], nx += dir[kd][1];
 		d += 1;
 	}
 	return;
@@ -56,9 +55,8 @@ void labeling(pos s, int cnt) {
 		q.pop();
 		label[s.y][s.x] = cnt;
 		for (int k = 0; k < 4; k++) {
-			int ny = cur.y + dir[k][0];
-			int nx = cur.x + dir[k][1];
-			if (0 <= ny && ny < n && 0 <= nx && nx < m && arr[ny][nx] == 1 && !label[ny][nx]) {
+			int ny = cur.y + dir[k][0], nx = cur.x + dir[k][1];
+			if (chk(ny, nx) && arr[ny][nx] == 1 && !label[ny][nx]) {
 				label[ny][nx] = cnt;
 				q.push(pos{ ny,nx });
 			}
@@ -69,15 +67,10 @@ void labeling(pos s, int cnt) {
 int main() {
 	ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 	cin >> n >> m;
-	for (int i = 0; i < n; i++) {
-		for (int j = 0; j < m; j++) {
-			cin >> arr[i][j];
-		}
-	}
+	for (int i = 0; i < n; i++) for (int j = 0; j < m; j++) cin >> arr[i][j];
 
 	for (int i = 0; i < 7; i++) par[i] = i;
 
-	//labeling
 	for (int i = 0; i < n; i++) {
 		for (int j = 0; j < m; j++) {
 			if (arr[i][j] && !label[i][j]) {
@@ -86,14 +79,13 @@ int main() {
 			}
 		}
 	}
-	//findMinimumLoad
+
 	for (int i = 0; i < n; i++) {
 		for (int j = 0; j < m; j++) {
 			if (label[i][j]) {
 				for (int k = 0; k < 4; k++) {
-					int ny = i + dir[k][0];
-					int nx = j + dir[k][1];
-					if (0 <= ny && ny < n && 0 <= nx && nx < m && !label[ny][nx]) {
+					int ny = i + dir[k][0], nx = j + dir[k][1];
+					if (chk(ny, nx) && !label[ny][nx]) {
 						findLoad(pos{ ny,nx }, label[i][j], k);
 					}
 				}
