@@ -39,7 +39,7 @@ int main() {
 		}
 		if (cnt > m) {
 			l = mid + 1;
-		}
+		}h
 		else {
 			if (cnt == m) {
 				ans = min(ans, tans);
