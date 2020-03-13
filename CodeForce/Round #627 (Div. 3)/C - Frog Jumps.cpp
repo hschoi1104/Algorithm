@@ -16,7 +16,7 @@ int main() {
 				pos = i;
 			}
 		}
-		tmp = max(tmp, int(s.length()-pos));
+		tmp = max(tmp, int(s.length() - pos));
 		cout << tmp << "\n";
 	}
 	return 0;
