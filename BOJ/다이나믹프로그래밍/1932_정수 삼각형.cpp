@@ -1,19 +1,20 @@
-#include <stdio.h>
-#include <algorithm>
+#include <bits/stdc++.h>
+
+#define FIO ios_base::sync_with_stdio(false), cin.tie(),cout.tie();
 using namespace std;
-int dp[501][501];
-int arr[501][501];
+int a[501][501], n;
+
 int main() {
-	int n;
-	scanf("%d", &n);
-	for (int i = 0; i < n; i++)	for (int j = 0; j <= i; j++)scanf("%d", &arr[i][j]);
-	dp[0][0] = arr[0][0];
-	for (int i = 0; i < n - 1; i++)	for (int j = 0; j <= i; j++) {
-		dp[i + 1][j] = max(dp[i + 1][j], dp[i][j] + arr[i + 1][j]);
-		dp[i + 1][j + 1] = max(dp[i + 1][j + 1], dp[i][j] + arr[i + 1][j + 1]);
-	}
-	int ans = 0;
-	for (int j = 0; j < n; j++) ans = max(ans, dp[n - 1][j]);
-	printf("%d", ans);
-	return 0;
+    FIO;
+    cin >> n;
+    for (int i = 1; i <= n; i++) for (int j = 1; j <= i; j++) cin >> a[i][j];
+
+    for (int i = 2; i <= n; i++)
+        for (int j = 1; j <= i; j++) {
+            a[i][j] += max(a[i - 1][j - 1], a[i - 1][j]);
+        }
+    int ans = 0;
+    for (int i = 1; i <= n; i++) ans = max(ans, a[n][i]);
+    cout << ans;
+    return 0;
 }
