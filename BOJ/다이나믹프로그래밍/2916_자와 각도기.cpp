@@ -10,9 +10,9 @@ bool ans[361];
 void go(int idx, int radi) {
     ans[radi] = true;
     if (idx == n) return;
-    int &ret = dp[idx][radi];
-    if (ret != -1) return;
-    ret = 1;
+    bool &ret = dp[idx][radi];
+    if (ret != false) return;
+    ret = true;
     go(idx + 1, (radi + a[idx]) % 360);
     go(idx, (radi + a[idx]) % 360);
     go(idx + 1, (radi - a[idx] + 360) % 360);
@@ -20,18 +20,13 @@ void go(int idx, int radi) {
 
 int main() {
     FIO;
-    memset(dp, 0, sizeof(dp));
     cin >> n >> m;
-    for (int i = 0; i < n; i++) {
-        cin >> x;
-        a.push_back(x);
-    }
+    a.resize(n);
+    for (int i = 0; i < n; i++) cin>>a[i];
     go(0, 0);
     for (int i = 0; i < m; i++) {
         cin >> x;
-        if (ans[x]) cout << "YES\n";
-        else cout << "NO\n";
+        cout<< (ans[x]?"YES\n":"NO\n");
     }
-
     return 0;
 }
