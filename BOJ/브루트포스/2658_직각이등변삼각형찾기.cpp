@@ -1,9 +1,7 @@
 #include <stdio.h>
 #include <algorithm>
 using namespace std;
-int dir[4][2] = { {-1,-1},{-1,1},{1,-1},{1,1} };
-int dir2[4][2] = { {1,1},{-1,1},{1,1},{1,-1} };
-int arr[11][11], ans, max_dep, cnt;
+int dir[4][2] = { {-1,-1},{-1,1},{1,-1},{1,1} }, dir2[4][2] = { {1,1},{-1,1},{1,1},{1,-1} }, arr[11][11], ans, cnt;
 struct pos {
 	int y, x;
 	bool operator < (const pos& tmp) const {
@@ -17,44 +15,38 @@ int go(int y, int x, int dep, int d) {
 	int ny = y + dir[d][0] * dep, nx = x + dir[d][1] * dep;
 	bool chk = true;
 	if (0 <= ny && ny < 10 && 0 <= nx && nx < 10) {
-		for (int i = min(x, nx); i <= max(x, nx); i++) {
-			if (!arr[ny][i]) chk = false;
-		}
+		for (int i = min(x, nx); i <= max(x, nx); i++) if (!arr[ny][i]) chk = false;
 	}
 	else chk = false;
-	if (chk) return max(dep, go(y, x, dep + 1, d));
-	else return 0;
+	return (chk ? max(dep, go(y, x, dep + 1, d)) : 0);
 }
+
 int go2(int y, int x, int dep, int d) {
+	bool chk = true;
 	if (d == 0 || d == 1) {
-		bool chk = true;
 		if (0 <= x - dep * dir2[d][1] && x + dep * dir2[d][1] < 10 && 0 <= y + dep * dir[d][0] && y + dep * dir[d][0] < 10) {
 			for (int i = x - dep * dir2[d][1]; i <= x + dep * dir2[d][1]; i++) {
 				if (!arr[y + dep * dir2[d][0]][i]) chk = false;
 			}
 		}
 		else chk = false;
-
-		if (chk) return max(dep, go2(y, x, dep + 1, d));
-		else return 0;
+		return (chk ? max(dep, go2(y, x, dep + 1, d)) : 0);
 	}
 	else {
-		bool chk = true;
 		if (0 <= x + dep * dir2[d][1] && x + dep * dir2[d][1] < 10 && 0 <= y - dep * dir[d][0] && y + dep * dir[d][0] < 10) {
 			for (int i = y - dep * dir2[d][0]; i <= y + dep * dir2[d][0]; i++) {
 				if (!arr[i][x + dep * dir2[d][1]]) chk = false;
 			}
 		}
 		else chk = false;
-		if (chk) return max(dep, go2(y, x, dep + 1, d));
-		else return 0;
+		return (chk ? max(dep, go2(y, x, dep + 1, d)) : 0);
 	}
 }
 int main() {
-	for (int i = 0; i < 10; i++) for (int j = 0; j < 10; j++) scanf("%1d", &arr[i][j]);
-
-	for (int i = 0; i < 10; i++) for (int j = 0; j < 10; j++) if (arr[i][j]) cnt += 1;
-
+	for (int i = 0; i < 10; i++) for (int j = 0; j < 10; j++) {
+		scanf("%1d", &arr[i][j]);
+		if (arr[i][j]) cnt += 1;
+	}
 	for (int i = 0; i < 10; i++) for (int j = 0; j < 10; j++) {
 		if (arr[i][j]) {
 			for (int k = 0; k < 4; k++) {
