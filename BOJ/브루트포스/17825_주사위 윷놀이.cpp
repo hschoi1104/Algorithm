@@ -37,10 +37,12 @@ void init() {
 }
 //이동가능한지 체크
 int canMove(int num, int s, int diceNum) {
-	bool startBlue = ((s == 5 || s == 10 || s == 15) ? true : false);
+	if (s == 5 || s == 10 || s == 15) {
+		s = v[s][1];
+		diceNum--;
+	}
 	while (diceNum--) {
-		if ((s == 5 || s == 10 || s == 15) && startBlue) s = v[s][1];
-		else s = v[s][0];
+		s = v[s][0];
 		if (s == END) break;
 	}
 	if (s == 32) return s;
@@ -58,6 +60,7 @@ int move() {
 		int res = canMove(moveOrder[i], curPos[moveOrder[i]], dice[i]);
 		if (res == -1) return 0;
 		else if (res == END) isFinish[moveOrder[i]] = 1;
+
 		curPos[moveOrder[i]] = res;
 		if (res != END) score += point[res];
 	}
