@@ -8,15 +8,10 @@ struct pos {
 int arr[21][21], brr[30][30], chk[30][30], ans[6], dir[4][2] = { {0,1},{1,0},{0,-1},{-1,0} }, n, res = INT_MAX;
 queue<pos>q;
 int count() {
-	for (int i = 1; i <= n; i++) for (int j = 1; j <= n; j++) {
-		ans[brr[i][j]] += arr[i][j];
-	}
+	for (int i = 1; i <= n; i++) for (int j = 1; j <= n; j++) ans[brr[i][j]] += arr[i][j];
 	ans[5] += ans[0];
 	int min_val = INT_MAX, max_val = 0;
-	for (int i = 1; i <= 5; i++) {
-		min_val = min(min_val, ans[i]);
-		max_val = max(max_val, ans[i]);
-	}
+	for (int i = 1; i <= 5; i++) min_val = min(min_val, ans[i]), max_val = max(max_val, ans[i]);
 	return max_val - min_val;
 }
 void bfs(int sy, int ey, int sx, int ex, int y, int x, int num) {
@@ -39,31 +34,14 @@ void bfs(int sy, int ey, int sx, int ex, int y, int x, int num) {
 	return;
 }
 void draw(int y, int x, int d1, int d2) {
-	//경계선 그리기
-	//경계1
 	int cy = y, cx = x;
-	for (int k = 0; k <= d1; k++) {
-		brr[cy][cx] = 5;
-		cy -= 1; cx += 1;
-	}
-	//경계2
+	for (int k = 0; k <= d1; k++) brr[cy - k][cx + k] = 5;
 	cy = y, cx = x;
-	for (int k = 0; k <= d2; k++) {
-		brr[cy][cx] = 5;
-		cy += 1; cx += 1;
-	}
-	//경계3
+	for (int k = 0; k <= d2; k++) brr[cy + k][cx + k] = 5;
 	cy = y - d1, cx = x + d1;
-	for (int k = 0; k <= d2; k++) {
-		brr[cy][cx] = 5;
-		cy += 1; cx += 1;
-	}
-	//경계4
+	for (int k = 0; k <= d2; k++) brr[cy + k][cx + k] = 5;
 	cy = y + d2, cx = x + d2;
-	for (int k = 0; k <= d1; k++) {
-		brr[cy][cx] = 5;
-		cy -= 1; cx += 1;
-	}
+	for (int k = 0; k <= d1; k++) brr[cy - k][cx + k] = 5;
 	return;
 }
 bool chkd1d2(int y, int x, int d1, int d2) {
@@ -80,19 +58,13 @@ void input() {
 	for (int i = 1; i <= n; i++) for (int j = 1; j <= n; j++) cin >> arr[i][j];
 }
 int solve() {
-	//y,x선택
 	for (int i = 1; i <= n; i++) {
 		for (int j = 1; j <= n; j++) {
-			//d1,d2선택
 			for (int d1 = 1; d1 < n; d1++) {
 				for (int d2 = 1; d2 < n; d2++) {
-					//가능하다면
 					if (!chkd1d2(i, j, d1, d2)) continue;
 					init();
-					//경계그리기
 					draw(i, j, d1, d2);
-					//영역표시하기
-					bfs(i - d1, i + d2, j, j + d1 + d2, i, j + 1, 5);
 					bfs(i, n, 1, j + d2 - 1, n, 1, 3);
 					bfs(1, i - 1, 1, j + d1, 1, 1, 1);
 					bfs(1, i - d1 + d2, j + d1 + 1, n, 1, n, 2);
