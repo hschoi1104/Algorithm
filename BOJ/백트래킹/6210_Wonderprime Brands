@@ -1,0 +1,38 @@
+#include <iostream>
+#include <math.h>
+#define FIO ios_base::sync_with_stdio(0);cin.tie(NULL);cout.tie(NULL);
+using namespace std;
+typedef long long ll;
+ll d,n;
+bool sosu(ll num){
+    if(num == 1) return false;
+    for(int i=2;i<=sqrt(num);i++) if(num%i == 0) return false;
+    return true;
+}
+int len(ll num){
+    return to_string(num).length();
+}
+int main() {
+    FIO;
+    cin>>d>>n;
+    if(len(n) < d*2-1) {
+        n = pow(10,d*2-1);
+    }
+    cout<<n<<"\n";
+    while(n){
+        int tmp = 10;
+        for(ll i=d;i<=len(n)-d;i++){
+            ll f = n / pow(tmp,i);
+            ll b = n % ll(pow(tmp,i));
+            
+            if(!f || !b || len(f)+len(b)!= len(n)) continue;
+            cout<<i<<" "<<f<<" "<<b<<"\n";
+            if(sosu(f) && sosu(b)){
+                cout<<n;
+                return 0;
+            }
+        }
+        n+=1;
+    }
+    return 0;
+}
