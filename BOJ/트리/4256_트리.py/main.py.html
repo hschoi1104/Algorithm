@@ -1,0 +1,40 @@
+<html>
+<head>
+<title>main.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cc7832;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #6897bb;}
+.s3 { color: #6a8759;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+main.py</font>
+</center></td></tr></table>
+<pre><span class="s0">import </span><span class="s1">sys</span>
+
+<span class="s1">sys.setrecursionlimit(</span><span class="s2">10 </span><span class="s1">** </span><span class="s2">4</span><span class="s1">)</span>
+
+
+<span class="s0">def </span><span class="s1">solution(r</span><span class="s0">, </span><span class="s1">s</span><span class="s0">, </span><span class="s1">e):</span>
+    <span class="s0">for </span><span class="s1">idx </span><span class="s0">in </span><span class="s1">range(s</span><span class="s0">, </span><span class="s1">e):</span>
+        <span class="s0">if </span><span class="s1">inorder[idx] == preorder[r]:</span>
+            <span class="s1">solution(r + </span><span class="s2">1</span><span class="s0">, </span><span class="s1">s</span><span class="s0">, </span><span class="s1">idx)</span>
+            <span class="s1">solution(r + idx + </span><span class="s2">1 </span><span class="s1">- s</span><span class="s0">, </span><span class="s1">idx + </span><span class="s2">1</span><span class="s0">, </span><span class="s1">e)</span>
+            <span class="s1">print(preorder[r]</span><span class="s0">, </span><span class="s1">end=</span><span class="s3">&quot; &quot;</span><span class="s1">)</span>
+
+
+<span class="s1">T = int(sys.stdin.readline().strip())</span>
+
+<span class="s0">for </span><span class="s1">t </span><span class="s0">in </span><span class="s1">range(T):</span>
+    <span class="s1">n = int(sys.stdin.readline().strip())</span>
+    <span class="s1">preorder = list(map(int</span><span class="s0">, </span><span class="s1">sys.stdin.readline().strip().split()))</span>
+    <span class="s1">inorder = list(map(int</span><span class="s0">, </span><span class="s1">sys.stdin.readline().strip().split()))</span>
+    <span class="s1">solution(</span><span class="s2">0</span><span class="s0">, </span><span class="s2">0</span><span class="s0">, </span><span class="s1">n)</span>
+</pre>
+</body>
+</html>
